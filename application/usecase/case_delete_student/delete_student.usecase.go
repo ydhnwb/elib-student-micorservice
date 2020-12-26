@@ -25,11 +25,11 @@ func NewDeleteStudentUseCase(repo repository.StudentRepository) DeleteStudentUse
 }
 
 func (ctl *deleteStudentUseCase) DeleteStudent(c *gin.Context) {
-	studentID := c.Param(":id")
+	studentID := c.Param("id")
 	_, err := ctl.studentRepository.DeleteStudent(studentID)
 	if err == nil {
-		helper.BuildErrorResponse(http.StatusBadRequest, err.Error(), helper.EmptyObj{}, c)
-	} else {
 		helper.BuildResponse(http.StatusOK, helper.EmptyObj{}, c)
+	} else {
+		helper.BuildErrorResponse(http.StatusBadRequest, err.Error(), helper.EmptyObj{}, c)
 	}
 }

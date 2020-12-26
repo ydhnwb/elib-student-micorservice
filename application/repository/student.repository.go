@@ -12,6 +12,7 @@ type StudentRepository interface {
 	CreateStudent(s entity.Student) (entity.Student, error)
 	UpdateStudent(s entity.Student) (entity.Student, error)
 	ListStudent() []entity.Student
+	FindByID(ID string) entity.Student
 	SearchStudent(query string) []entity.Student
 	DeleteStudent(studentID string) (bool, error)
 }
@@ -28,12 +29,11 @@ func NewStudentRepository(db *gorm.DB) StudentRepository {
 }
 
 func (repo *studentRepository) CreateStudent(s entity.Student) (entity.Student, error) {
-	student := entity.Student{}
-	err := repo.db.Save(&student).Error
+	err := repo.db.Save(&s).Error
 	if err != nil {
-		return student, err
+		return s, err
 	}
-	return student, nil
+	return s, nil
 }
 
 func (repo *studentRepository) UpdateStudent(s entity.Student) (entity.Student, error) {
@@ -54,6 +54,12 @@ func (repo *studentRepository) SearchStudent(query string) []entity.Student {
 	students := []entity.Student{}
 	repo.db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", query)).Find(&students)
 	return students
+}
+
+func (repo *studentRepository) FindByID(ID string) entity.Student {
+	student := entity.Student{}
+	repo.db.Find(&student, ID).Take(&student)
+	return student
 }
 
 func (repo *studentRepository) DeleteStudent(studentID string) (bool, error) {

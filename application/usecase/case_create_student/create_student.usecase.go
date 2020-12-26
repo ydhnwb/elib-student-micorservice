@@ -14,7 +14,7 @@ import (
 //CreateStudentUseCase act as handler/controller
 //It is more spesific than regular service
 type CreateStudentUseCase interface {
-	CreateUser(c *gin.Context)
+	CreateStudent(c *gin.Context)
 }
 
 type createStudentUseCase struct {
@@ -28,7 +28,7 @@ func NewCreateStudentUseCase(repo repository.StudentRepository) CreateStudentUse
 	}
 }
 
-func (ctl *createStudentUseCase) CreateUser(c *gin.Context) {
+func (ctl *createStudentUseCase) CreateStudent(c *gin.Context) {
 	studentCreateDTO := dto.StudentCreateDTO{}
 	e := c.ShouldBind(&studentCreateDTO)
 	if e != nil {
